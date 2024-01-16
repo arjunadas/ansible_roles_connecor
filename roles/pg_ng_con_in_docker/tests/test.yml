@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - /etc/ansible/roles/pg_ng_con_in_docker/

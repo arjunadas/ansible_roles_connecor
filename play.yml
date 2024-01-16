@@ -1,0 +1,8 @@
+---
+- hosts: dev109
+  become: true
+  remote_user: ansible
+  roles:
+#   - nginx
+   - postgres
+#   - connector

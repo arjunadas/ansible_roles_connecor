@@ -1,0 +1,8 @@
+---
+- hosts: dev109   # Тут прописано для какого сервера будет запускаться playbook
+  become: true
+  remote_user: ansible
+  roles:
+   - nginx
+   - connector
+   - pg_ng_con_in_docker

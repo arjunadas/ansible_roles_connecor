@@ -1,0 +1,4 @@
+---
+- name: Debug message
+  ansible.builtin.debug:
+    msg: "{{ [ansible_architecture] | map('extract', deb_architecture) | first }}"

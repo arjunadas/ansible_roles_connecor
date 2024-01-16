@@ -1,0 +1,24 @@
+services:
+  pg_docker:
+    image: postgres
+    container_name: postgres-docker
+    restart: always
+    environment:
+      - POSTGRES_USER={{ pg_user }}
+      - POSTGRES_PASSWORD={{ pg_pwd }}
+    volumes:
+      - {{ path_db }}/{{ pg_user }}:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
+
+  nginx_docker:
+    image: nginx
+    container_name: nginx-docker
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    ports:
+      - 443:443
+    volumes:
+      - {{path_nginx}}/{{ url_connector }}.conf:/etc/nginx/conf.d/{{ url_connector }}.conf
+      - {{path_nginx}}/ssl:/etc/nginx/ssl

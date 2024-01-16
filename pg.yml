@@ -1,0 +1,6 @@
+---
+- hosts: dev108
+  become: true
+  remote_user: ansible
+  roles:
+   - setpg

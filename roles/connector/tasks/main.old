@@ -1,0 +1,71 @@
+---
+- name: Check that the /tmp/connector.tar exist
+  stat:
+    path: /tmp/connector.tar
+  register: stat_result
+  
+- name: Download connector.tar if not exist
+  ansible.builtin.get_url:
+    url: https://bpmsoft-oc-widget1.cloudbpm.ru/devops/connector.tar
+    dest: /tmp/connector.tar
+  when: not stat_result.stat.exists
+  
+- name: Create a directory {{ path_connector }} if it does not exist
+  ansible.builtin.file:
+    path: "{{ path_connector }}"
+    state: directory
+  
+- name: Check if a folder is empty
+  find:
+    paths: "{{ path_connector }}"
+  register: filesFound
+  
+- name: Extract connector.tar into {{ path_connector }} if the folder epmty
+  ansible.builtin.unarchive:
+    src: /tmp/connector.tar
+    dest: /opt/soft
+    remote_src: yes
+  when: filesFound.matched < 3
+  
+- name: Install a packages-microsoft-prod.deb package
+  ansible.builtin.apt:
+    deb: https://packages.microsoft.com/config/debian/{{ ansible_distribution_major_version }}/packages-microsoft-prod.deb
+  
+- name: Install a libssl1.1
+  ansible.builtin.apt:
+    deb: http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb11u5_amd64.deb
+  
+- name: Run the equivalent of "apt-get update" as a separate step
+  ansible.builtin.apt:
+    update_cache: yes
+  
+- name: Install dotnet-sdk-7.0
+  ansible.builtin.apt:
+    name: dotnet-sdk-7.0
+  when:
+   ansible_distribution_major_version == "12"
+  
+- name: Copy appsettings.json
+  template:
+    src: /etc/ansible/roles/connector/templates/appsettings.json
+    dest: "{{path_connector}}/appsettings.json"
+  
+- name: Creating a service connector # https://stackoverflow.com/questions/35984151/how-to-create-new-system-service-by-ansible-playbook
+  copy:
+    dest: "/etc/systemd/system/{{ con_service_name }}.service"
+    content: |
+      [Unit]
+      Description=Connector
+      After=network.target
+      [Service]
+      Restart=always
+      RestartSec=5
+      Environment="DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1"
+      Environment="ASPNETCORE_URLS=http://0.0.0.0:5000"
+      WorkingDirectory={{ path_connector }}
+      ExecStart=dotnet hook_service.dll
+      [Install]
+      WantedBy=default.target
+  
+- name: Start service connector
+  service: name={{ con_service_name }}.service state=started enabled=yes

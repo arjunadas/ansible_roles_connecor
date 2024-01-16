@@ -1,0 +1,28 @@
+all:
+  vars:
+    deb_architecture: {"aarch64": "arm64","x86_64": "amd64"}
+    pass_for_zip: Paswword123QWE
+    con_service_name: connector
+    fs_service_name: fileservice
+    path_connector: /opt/soft/connector
+    path_fileservice: /opt/soft/fileservice
+    path_widget: /opt/soft/widget
+    path_db: /opt/soft/db
+    path_nginx: /opt/soft/nginx
+    path_docker: /opt/soft/docker
+ 
+dev109:
+  hosts:
+    192.168.0.17:
+      dev_name: dev109
+      url_connector: "{{ dev_name }}-connector.ai.norbit.ru"
+      url_fileservice: "{{ dev_name }}-fileservice.ai.norbit.ru"
+      pg_user: "connector-{{ dev_name }}"
+      pg_pwd: Password123
+      pg_server_address: localhost
+      pg_db_name: "connector-{{ dev_name }}"
+      ip_connector: 192.168.0.17
+      name_of_service_in_docker_compose_for_pg: pg_docker
+      name_of_service_in_docker_compose_for_nginx: nginx_docker
+      name_of_service_in_docker_compose_for_connector: connector_docker
+      name_of_service_in_docker_compose_for_fileservice: fileservice_docker

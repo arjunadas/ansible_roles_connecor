@@ -1,0 +1,26 @@
+all:
+  vars:
+    deb_architecture: {"aarch64": "arm64","x86_64": "amd64"}
+    pass_for_zip: Paswword123QWE
+    path_connector: /opt/soft/connector
+    path_fileservice: /opt/soft/fileservice
+    path_widget: /opt/soft/widget
+    path_db: /opt/soft/db
+    path_nginx: /opt/soft/nginx
+    path_docker: /opt/soft/docker
+ 
+dev109:
+  hosts:
+    185.98.82.26:
+      ansible_ssh_user: ansible
+      ansible_ssh_port: 2223
+      dev_name: dev109
+      url_connector: "{{ dev_name }}-connector.occ.cloudbpm.ru"
+      url_fileservice: "{{ dev_name }}-fileservice.occ.cloudbpm.ru"
+      pg_user: "connector-{{ dev_name }}"
+      pg_pwd: Password123
+      pg_db_name: "connector-{{ dev_name }}"
+      name_of_service_pg: pg_docker
+      name_of_service_nginx: nginx_docker
+      name_of_service_connector: connector_docker
+      name_of_service_fileservice: fileservice_docker

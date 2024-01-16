@@ -1,0 +1,21 @@
+---
+- name: Install 7z
+  apt: name=p7zip-full update_cache=yes
+   
+- name: Download sert
+  ansible.builtin.get_url:
+    url: https://bpmsoft-oc-widget1.cloudbpm.ru/devops/norbit.dll
+    dest: /tmp/norbit.7z
+ 
+- name: Create a directory {{ path_nginx}} if it does not exist
+  ansible.builtin.file:
+    path: "{{ path_nginx}}"
+    state: directory
+ 
+- name: Unzip sert
+  shell: /usr/bin/7z -y x -p{{ pass_for_zip }} /tmp/norbit.7z -o{{path_nginx}}/ssl/
+ 
+- name: Add virtual domain connector in NGINX
+  template:
+    src: /etc/ansible/roles/nginx/templates/connector.conf
+    dest: "{{path_nginx}}/{{ url_connector }}.conf"

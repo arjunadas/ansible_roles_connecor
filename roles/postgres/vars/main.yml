@@ -1,0 +1,6 @@
+postgresql_options:
+  - { name: listen_addresses, value: "*" }
+  - { name: max_connections,  value: "250" }
+
+postgresql_hba_entries:
+  - { contype: host, address: 0.0.0.0/0, method: scram-sha-256 }
