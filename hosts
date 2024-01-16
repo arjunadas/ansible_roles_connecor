@@ -1,7 +1,7 @@
 all:
   vars:
     deb_architecture: {"aarch64": "arm64","x86_64": "amd64"}
-    pass_for_zip: Paswword123QWE
+    pass_for_zip: Pasword
     path_connector: /opt/soft/connector
     path_fileservice: /opt/soft/fileservice
     path_widget: /opt/soft/widget
